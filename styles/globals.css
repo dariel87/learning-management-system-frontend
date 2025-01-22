@@ -1,21 +1,51 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+    --background: #ffffff;
+    --foreground: #171717;
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+    :root {
+        --background: #ededed;
+        --foreground: #0a0a0a;
+    }
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+    color: var(--foreground);
+    background: var(--background);
+    font-family: "Roboto", serif;
+}
+
+.h-screen {
+    height: 100vh
+}
+
+#sidebar {
+    background: #222;
+}
+
+#sidebar h4{
+    font-weight: bold;
+}
+
+#sidebar h4,
+#sidebar-menu a {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+#sidebar-menu a:hover {
+    background: rgba(255,255,255,.2);
+    border-radius: 5px;
+}
+
+#sidebar-menu a>span:nth-child(1){
+    margin-top: -2px;
+}
+
+#navbar {
+    margin-left: calc(-1 * var(--bs-gutter-x) * .5);
+    width: calc(100% + var(--bs-gutter-x))
 }
