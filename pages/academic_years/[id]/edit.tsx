@@ -9,27 +9,14 @@ import { AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
 import Loading from "@/components/loading";
 
-enum Role {
-    teacher = "teacher",
-    student = "student",
-    administrator = "administrator"
-}
-
 type Inputs = {
-    username: string,
-    role: Role,
-    email: string,
     name: string,
-    password: string,
-    confirm_password: string
 }
 
 const errorStyle = {
     fontSize: 12,
     fontStyle: 'italic'
 }
-
-const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
 const UserEdit = () => {
     const router = useRouter();
@@ -54,12 +41,9 @@ const UserEdit = () => {
         if(router.isReady){
             setLoadingActive(true);
 
-            axiosInstance.get(`/users/${id}`)
+            axiosInstance.get(`/academic_years/${id}`)
             .then(response => {
-                setValue('username', response.data.username);
                 setValue('name', response.data.name);
-                setValue('email', response.data.email);
-                setValue('role', response.data.role);
             })
             .catch(e => {
                 Swal.fire('Error', e.response.data?.message, 'error');
@@ -74,14 +58,12 @@ const UserEdit = () => {
         try { 
             setLoadingActive(true);
 
-            const response: AxiosResponse = await axiosInstance.put(`/users/${id}`, {
-                role: data.role,
-                name: data.name,
-                email: data.email
+            const response: AxiosResponse = await axiosInstance.put(`/academic_years/${id}`, {
+                name: data.name
             })
 
             Swal.fire('Success', response.data.message, 'success').then(() => {
-                router.push('/users');
+                router.push('/academic_years');
             })
         } catch (e: any) {
             const { message } = e.response.data;
@@ -97,41 +79,11 @@ const UserEdit = () => {
             <Breadcrumbs title="Edit User" links={links} />
             <div className="bg-white p-3">
                 <div className="form-group mb-3">
-                    <label htmlFor="">Username</label>
+                    <label htmlFor="">Year</label>
                     <div className="row">
                         <div className="col-md-3 col-12">
-                            <input type="text" disabled className="form-control" {...register('username', { required: true })} />
-                        </div>
-                    </div>
-                </div>
-                <div className="form-group mb-3">
-                    <label htmlFor="">Role</label>
-                    <div className="row">
-                        <div className="col-md-3 col-12">
-                            <select className="form-select" {...register('role', { required: true })}>
-                                <option value="administrator">Administrator</option>
-                                <option value="teacher">Teacher</option>
-                                <option value="student">Student</option>
-                            </select>
-                            {errors.role && <span className="text-danger" style={ errorStyle }>This field is required</span>}
-                        </div>
-                    </div>
-                </div>
-                <div className="form-group mb-3">
-                    <label htmlFor="">Name</label>
-                    <div className="row">
-                        <div className="col-md-6 col-12">
                             <input type="text" className="form-control" {...register('name', { required: true })} />
                             {errors.name && <span className="text-danger" style={ errorStyle }>This field is required</span>}
-                        </div>
-                    </div>
-                </div>
-                <div className="form-group mb-3">
-                    <label htmlFor="">Email</label>
-                    <div className="row">
-                        <div className="col-md-6 col-12">
-                            <input type="text" className="form-control" {...register('email', { pattern: emailRegex })} />
-                            {errors.email && <span className="text-danger" style={ errorStyle }>This not a valid email address</span>}
                         </div>
                     </div>
                 </div>

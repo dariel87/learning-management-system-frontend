@@ -3,7 +3,7 @@ import React from 'react'
 
 export default function Sidebar() {
     return (
-        <div className='h-screen mt-3'>
+        <div className='h-screen pt-3'>
             <h4 className='text-center mb-4'>LMS</h4>
             <ul className="list-unstyled ps-1" id="sidebar-menu">
                 <li>

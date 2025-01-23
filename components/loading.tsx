@@ -17,8 +17,6 @@ const Loading = ({is_active}: LoadingProps) => {
                             width={50}
                             height={50}
                         />
-                        <br />
-                        <span className="text-white mt-3 d-block">Loading content...</span>
                     </div>
                 </div>
             </div>

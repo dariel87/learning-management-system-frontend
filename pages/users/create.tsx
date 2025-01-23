@@ -67,7 +67,7 @@ const UserCreate = () => {
 
     return (
         <>
-            <Breadcrumbs links={links} />
+            <Breadcrumbs title="Create User" links={links} />
             <div className="bg-white p-3">
                 <div className="form-group mb-3">
                     <label htmlFor="">Username</label>

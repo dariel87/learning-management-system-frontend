@@ -9,31 +9,63 @@ import Loading from "@/components/loading";
 import Swal from "sweetalert2";
 
 const UserIndex = () => {
-    const [users, setUsers] = useState<IUser[]>([]);
-    const [active, setActive] = useState(false);
+    const [rows, setRows] = useState<IUser[]>([]);
+    const [active, setLoadingActive] = useState(false);
 
     const links = [
         {url: "#", text: "User list"}
     ];
 
-    useEffect(() => {
-        setActive(true);
-        axiosInstance.get('/users')
-        .then(response => {
-            setUsers(response.data);
-        })
-        .catch(e => {
+    const destroy = (event: React.MouseEvent<HTMLElement, MouseEvent>, id: string) => {
+        event.preventDefault();
+
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                setLoadingActive(true);
+
+                try {
+                    const response = await axiosInstance.delete(`/users/${id}`)
+
+                    Swal.fire('Success', response.data.message, 'success');
+                    getData();
+                } catch (e: any) {
+                    Swal.fire('Error', e.response.data.message, 'error');
+                }
+
+                setLoadingActive(false);
+            }
+        });
+    }
+
+    const getData = async () => {
+        setLoadingActive(true);
+
+        try {
+            const response = await axiosInstance.get('/academic_years');
+            setRows(response.data);
+        } catch (e: any) {
             Swal.fire('Error', 'failed to fetch data from server', 'error')
-        })
-        .finally(() => {
-            setActive(false);
-        })
-    }, [])
+        }
+        
+        setLoadingActive(false);
+    }
+
+    useEffect(() => {
+        getData();
+    }, []);
 
     return (
         <>
         <Loading is_active={active} />
-        <Breadcrumbs links={links} />
+        <Breadcrumbs title="User List" links={links} />
         <div className="bg-white p-3">
             <Link href="/users/create" className="btn btn-sm btn-primary float-end">
                 <IonIcon name="add-outline" />
@@ -52,17 +84,17 @@ const UserIndex = () => {
                     </tr>
                 </thead>
                 <tbody>
-                {users.length > 0  ?
+                {rows.length > 0  ?
                 (
-                    users.map(user => 
-                        <tr>
-                            <td>{user.id}</td>
-                            <td>{user.name}</td>
-                            <td>{user.email}</td>
-                            <td>{user.role}</td>
-                            <td>
-                                <Link href={`/users/${user.id}/edit`} className="btn btn-sm btn-success me-2"><IonIcon name="pencil-outline" /></Link>
-                                <a href="" className="btn btn-sm btn-danger"><IonIcon name="trash-outline" /></a>
+                    rows.map(row => 
+                        <tr key={row.id}>
+                            <td width={'5%'}>{row.id}</td>
+                            <td>{row.name}</td>
+                            <td>{row.email}</td>
+                            <td>{row.role}</td>
+                            <td width={'8%'}>
+                                <Link href={`/users/${row.id}/edit`} className="btn btn-sm btn-success me-2"><IonIcon name="pencil-outline" /></Link>
+                                <a href="" className="btn btn-sm btn-danger" onClick={e => destroy(e, row.id)}><IonIcon name="trash-outline" /></a>
                             </td>
                         </tr>
                     )
