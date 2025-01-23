@@ -46,7 +46,7 @@ const UserCreate = () => {
             }
     } = useForm<Inputs>();
 
-    const createUser: SubmitHandler<Inputs> = async (data) => {
+    const create: SubmitHandler<Inputs> = async (data) => {
         try { 
             const response: AxiosResponse = await axiosInstance.post('/users', {
                 username: data.username,
@@ -134,7 +134,7 @@ const UserCreate = () => {
                     </div>
                 </div>
                 <hr />
-                <button className="btn btn-primary me-2" onClick={handleSubmit(createUser)}>save</button>
+                <button className="btn btn-primary me-2" onClick={handleSubmit(create)}>save</button>
                 <Link href="/users" className="btn btn-danger">cancel</Link>
             </div>
         </>

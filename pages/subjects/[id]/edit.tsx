@@ -9,8 +9,15 @@ import { AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
 import Loading from "@/components/loading";
 
+enum SubjectType{
+    regular = 'regular',
+    extracurricular = 'extracurricular',
+    break = 'break'
+}
+
 type Inputs = {
     name: string,
+    type: SubjectType
 }
 
 const errorStyle = {
@@ -18,13 +25,13 @@ const errorStyle = {
     fontStyle: 'italic'
 }
 
-const UserEdit = () => {
+const SubjectEdit = () => {
     const router = useRouter();
     const [active, setLoadingActive] = useState(false);
     const { id } = router.query;
 
     const links = [
-        {url: '/users', text: 'User list'},
+        {url: '/subjects', text: 'Subject list'},
         {url: '#', text: 'Edit'},
     ];
 
@@ -41,9 +48,10 @@ const UserEdit = () => {
         if(router.isReady){
             setLoadingActive(true);
 
-            axiosInstance.get(`/academic_years/${id}`)
+            axiosInstance.get(`/subjects/${id}`)
             .then(response => {
                 setValue('name', response.data.name);
+                setValue('type', response.data.type);
             })
             .catch(e => {
                 Swal.fire('Error', e.response.data?.message, 'error');
@@ -58,12 +66,13 @@ const UserEdit = () => {
         try { 
             setLoadingActive(true);
 
-            const response: AxiosResponse = await axiosInstance.put(`/academic_years/${id}`, {
-                name: data.name
+            const response: AxiosResponse = await axiosInstance.put(`/subjects/${id}`, {
+                name: data.name,
+                type: data.type
             })
 
             Swal.fire('Success', response.data.message, 'success').then(() => {
-                router.push('/academic_years');
+                router.push('/subjects');
             })
         } catch (e: any) {
             const { message } = e.response.data;
@@ -76,25 +85,36 @@ const UserEdit = () => {
     return (
         <>
             <Loading is_active={active} />
-            <Breadcrumbs title="Edit User" links={links} />
+            <Breadcrumbs title="Edit Subject" links={links} />
             <div className="bg-white p-3">
                 <div className="form-group mb-3">
-                    <label htmlFor="">Year</label>
-                    <div className="row">
+                    <label htmlFor="">Name</label>
+                    <div className="row mb-3">
                         <div className="col-md-3 col-12">
                             <input type="text" className="form-control" {...register('name', { required: true })} />
                             {errors.name && <span className="text-danger" style={ errorStyle }>This field is required</span>}
                         </div>
                     </div>
+                    <div className="row">
+                        <div className="col-md-3 col-12">
+                            <label htmlFor="">Type</label>
+                            <select className="form-select" {...register('type', { required: true })}>
+                                <option value="regular">Regular</option>
+                                <option value="extracurricular">Extracurricular</option>
+                                <option value="break">Break</option>
+                            </select>
+                            {errors.type && <span className="text-danger" style={ errorStyle }>This field is required</span>}
+                        </div>
+                    </div>
                 </div>
                 <hr />
                 <button className="btn btn-primary me-2" onClick={handleSubmit(update)}>save</button>
-                <Link href="/academic_years" className="btn btn-danger">cancel</Link>
+                <Link href="/subjects" className="btn btn-danger">cancel</Link>
             </div>
         </>
     )
 }
 
-UserEdit.getLayout = (page: any) => <DashboardLayout>{ page }</DashboardLayout> 
+SubjectEdit.getLayout = (page: any) => <DashboardLayout>{ page }</DashboardLayout> 
 
-export default UserEdit;
+export default SubjectEdit;
