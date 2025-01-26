@@ -8,7 +8,7 @@ const Loading = ({is_active}: LoadingProps) => {
     return (
         <>
         {is_active &&
-            <div className="position-fixed start-0 top-0 w-100 h-100" style={{backgroundColor:'rgba(0, 0, 0, .5)'}}>
+            <div className="position-fixed start-0 top-0 w-100 h-100" style={{backgroundColor:'rgba(0, 0, 0, .5)', zIndex: 999}}>
                 <div style={{position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)'}}>
                     <div className="text-center">
                         <Image

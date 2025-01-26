@@ -13,6 +13,10 @@ export default function Sidebar() {
                         <span>Dashboard</span>
                     </a>
                 </li>
+                <li><Link href="/classes" className="d-flex align-items-start p-2">
+                    <IonIcon name="desktop-outline" className="me-2" />
+                    Classes</Link>
+                </li>
                 <li><Link href="/subjects" className="d-flex align-items-start p-2">
                     <IonIcon name="book-outline" className="me-2" />
                     Subject</Link>
@@ -20,6 +24,10 @@ export default function Sidebar() {
                 <li><Link href="/academic_years" className="d-flex align-items-start p-2">
                     <IonIcon name="calendar-outline" className="me-2" />
                     Academic Year</Link>
+                </li>
+                <li><Link href="/academic_years" className="d-flex align-items-start p-2">
+                    <IonIcon name="receipt-outline" className="me-2" />
+                    Test</Link>
                 </li>
                 <li><Link href="/users" className="d-flex align-items-start p-2">
                     <IonIcon name="people-outline" className="me-2" />

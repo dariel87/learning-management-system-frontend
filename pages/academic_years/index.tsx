@@ -7,9 +7,13 @@ import { useEffect, useState } from "react";
 import axiosInstance from "@/utils/axiosInstance";
 import Loading from "@/components/loading";
 import Swal from "sweetalert2";
+import ResponsivePagination from 'react-responsive-pagination';
+import 'react-responsive-pagination/themes/bootstrap.css';
 
 const AcademicYearIndex = () => {
     const [rows, setRows] = useState<IAcademicYear[]>([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPage, setTotalPage] = useState(1);
     const [active, setLoadingActive] = useState(false);
 
     const links = [
@@ -35,7 +39,7 @@ const AcademicYearIndex = () => {
                     const response = await axiosInstance.delete(`/academic_years/${id}`)
 
                     Swal.fire('Success', response.data.message, 'success');
-                    getData();
+                    getData(currentPage);
                 } catch (e: any) {
                     Swal.fire('Error', e.response.data.message, 'error');
                 }
@@ -45,12 +49,18 @@ const AcademicYearIndex = () => {
         });
     }
 
-    const getData = async () => {
+    const getData = async (page: number) => {
         setLoadingActive(true);
 
         try {
-            const response = await axiosInstance.get('/academic_years');
-            setRows(response.data);
+            const response = await axiosInstance.get('/academic_years', {
+                params: {
+                    page
+                }
+            });
+
+            setRows(response.data.rows);
+            setTotalPage(response.data.total_pages);
         } catch (e: any) {
             Swal.fire('Error', 'failed to fetch data from server', 'error')
         }
@@ -59,8 +69,8 @@ const AcademicYearIndex = () => {
     }
 
     useEffect(() => {
-        getData();
-    }, []);
+        getData(currentPage);
+    }, [currentPage]);
 
     return (
         <>
@@ -104,6 +114,14 @@ const AcademicYearIndex = () => {
                         }
                     </tbody>
                 </table>
+                <ResponsivePagination
+                    previousLabel="previous"
+                    nextLabel="next"
+                    extraClassName="justify-content-start"
+                    current={currentPage}
+                    total={totalPage}
+                    onPageChange={ setCurrentPage }
+                    />
             </div>
         </>
     )
