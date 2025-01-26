@@ -111,7 +111,7 @@ const SubjectIndex = () => {
                             :
                             (
                                 <tr>
-                                    <td colSpan={5}>Cannot find any rows. try add one</td>
+                                    <td colSpan={4}>Cannot find any rows. try add one</td>
                                 </tr>
                             )
                         }

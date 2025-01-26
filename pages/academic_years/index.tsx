@@ -108,7 +108,7 @@ const AcademicYearIndex = () => {
                             :
                             (
                                 <tr>
-                                    <td colSpan={5}>Cannot find any rows. try add one</td>
+                                    <td colSpan={3}>Cannot find any rows. try add one</td>
                                 </tr>
                             )
                         }
